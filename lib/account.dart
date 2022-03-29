@@ -27,11 +27,19 @@ class Body extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Text(
+            "Log In",
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 32),
           TextField(
             decoration: const InputDecoration(
               labelText: 'account',
+              labelStyle: TextStyle(color: Colors.black),
+              hintText: 'enter 4~20 words',
               filled: true,
               fillColor: Color.fromARGB(216, 144, 210, 220),
+              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightBlue)),
             ),
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
@@ -41,16 +49,26 @@ class Body extends StatelessWidget {
           TextField(
             decoration: const InputDecoration(
               labelText: 'password',
+              labelStyle: TextStyle(color: Colors.black),
+              hintText: 'enter 6~12 words',
               filled: true,
               fillColor: Color.fromARGB(216, 144, 210, 220),
+              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightBlue)),
             ),
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
+            //看不到內容（密碼格式）
+            obscureText: true,
             controller: passnum,
           ),
           const SizedBox(height: 16.0),
           ElevatedButton(onPressed: null, child: Text("Log In")),
-          TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => signup()));}, child: Text("Sign Up"))
+          const SizedBox(height: 8.0),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'sign');
+              },
+              child: const Text("Sign Up"))
         ],
       ),
     );

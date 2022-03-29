@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:untitled/account.dart';
 import 'package:untitled/home.dart';
 import 'package:untitled/search.dart';
+import 'package:untitled/signup.dart';
 
 import 'Bpage.dart';
 
@@ -22,15 +23,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      home: const MyHomePage(title: 'Flutter Test'),
+      routes: <String,WidgetBuilder>{
+        "my":(BuildContext context)=>new MyHomePage(),
+        "home":(BuildContext context)=>new home(),
+        "search":(BuildContext context)=>new search(),
+        "account":(BuildContext context)=>new account(),
+        "sign":(BuildContext context)=>new signup(),
+      },
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
-  final String title;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -48,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Flutter Test'),
       ),
       body: this.pages[this._counter],
       bottomNavigationBar: button(),
