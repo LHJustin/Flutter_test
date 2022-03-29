@@ -16,7 +16,6 @@ class home extends StatelessWidget {
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return GridView.count(
@@ -27,35 +26,43 @@ class Body extends StatelessWidget {
       crossAxisCount: 2,
       children: <Widget>[
         Container(
-          child :const Text("test1"),
+          child: const Text("test1"),
           color: Colors.greenAccent,
         ),
         Container(
-          child: Stack(
-            children: [
-              GestureDetector(
-                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Bpage()));},
-                child: FadeInImage.assetNetwork(placeholder: "Images/mm.jpg",
-                    image: "https://storage.googleapis.com/lottcube/production/1/headphoto/headphoto1644397354.png"),
-              ),
-              Column(
+          child: GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Bpage()));
+              },
+              child: Stack(
                 children: [
-                  Text("data",style: TextStyle(backgroundColor: Color.fromARGB(100, 256,256,256),color: Colors.white,fontSize: 30))
+                  FadeInImage.assetNetwork(placeholder: "Images/mm.jpg", image: "https://storage.googleapis.com/lottcube/production/1/headphoto/headphoto1644397354.png"),
+                  Column(
+                    children: const [
+                      Text(
+                        "data",
+                        style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
+                      )
+                    ],
+                  ),
+                  Column(
+                    verticalDirection: VerticalDirection.up,
+                    children: [
+                      Text(
+                        "cc",
+                        style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
+                      ),
+                      Text(
+                        "data",
+                        style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
+                      ),
+                    ],
+                  )
                 ],
-              ),
-              Column(
-                verticalDirection: VerticalDirection.up ,
-                children: [
-                  Text("cc",style: TextStyle(backgroundColor: Color.fromARGB(100, 256,256,256),color: Colors.white,fontSize: 30)),
-                  Text("data",style: TextStyle(backgroundColor: Color.fromARGB(100, 256,256,256),color: Colors.white),)
-                ],
-              )
-            ],
-          ),
+              )),
           color: Colors.purple,
         )
       ],
     );
   }
-
 }
