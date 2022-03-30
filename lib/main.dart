@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:untitled/account.dart';
 import 'package:untitled/home.dart';
+import 'package:untitled/personal.dart';
 import 'package:untitled/search.dart';
 import 'package:untitled/signup.dart';
 
@@ -49,7 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List pages = [
     home(),
     search(),
-    account()
+    account(),
+    personal()
   ];
 
   @override
