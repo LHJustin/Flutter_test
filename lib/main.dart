@@ -1,7 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/account.dart';
 import 'package:untitled/home.dart';
 import 'package:untitled/personal.dart';
@@ -24,12 +23,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      routes: <String,WidgetBuilder>{
-        "my":(BuildContext context)=>new MyHomePage(),
-        "home":(BuildContext context)=>new home(),
-        "search":(BuildContext context)=>new search(),
-        "account":(BuildContext context)=>new account(),
-        "sign":(BuildContext context)=>new signup(),
+      routes: <String, WidgetBuilder>{
+        "my": (BuildContext context) => new MyHomePage(),
+        "home": (BuildContext context) => new home(),
+        "search": (BuildContext context) => new search(),
+        "account": (BuildContext context) => new account(),
+        "sign": (BuildContext context) => new signup(),
       },
       home: const MyHomePage(),
     );
@@ -39,20 +38,32 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
-
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var bool;
   List pages = [
     home(),
     search(),
     account(),
-    personal()
+    personal(),
   ];
+
+  @override
+  initState() {
+    super.initState();
+    _change();
+  }
+
+  _change() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      bool = (prefs.getBool("login") ?? false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +71,32 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Flutter Test'),
       ),
-      body: this.pages[this._counter],
+      body: pages[_counter],
       bottomNavigationBar: button(),
     );
   }
 
   @override
-  Widget button(){
+  Widget button() {
     return BottomNavigationBar(
-      items:<BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
-        BottomNavigationBarItem(icon: Icon(Icons.search),label: "search"),
-        BottomNavigationBarItem(icon: Icon(Icons.account_circle),label: "account")
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: "search"),
+        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "account")
       ],
-      currentIndex: this._counter,
-      onTap: (int index){
+      currentIndex: _counter,
+      onTap: (int index) {
         setState(() {
-          this._counter = index;
+            _counter = index;
+            if(bool){
+              pages.removeAt(2);
+              pages.add(personal());
+            }else{
+              pages.removeAt(2);
+              pages.add(account());
+            }
         });
       },
     );
   }
-
 }

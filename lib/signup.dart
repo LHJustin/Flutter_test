@@ -24,14 +24,21 @@ class Body extends StatelessWidget {
   final account = TextEditingController();
   final pass = TextEditingController();
   var num;
-  
+
   _remember() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("num", num);
     await prefs.setString("name$num", nickname.text.toString());
     await prefs.setString("account$num", account.text.toString());
     await prefs.setString("password$num", pass.text.toString());
+    await prefs.setInt("id", num);
+    await prefs.setInt("num", ++num);
     await prefs.setBool("login", true);
+  }
+
+  Future<int> _getNum() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    num = prefs.getInt("num") ?? 0;
+    return num;
   }
 
   @override
@@ -42,7 +49,6 @@ class Body extends StatelessWidget {
       //超出範圍可滑動
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset("Images/pic_personal.png"),
             const SizedBox(height: 24.0),
@@ -88,52 +94,59 @@ class Body extends StatelessWidget {
               controller: pass,
             ),
             const SizedBox(height: 16.0),
-            ElevatedButton(
-                onPressed: () {
-                  var accountnum;
-                  var passnum;
-                  var name;
-                  name = nickname.text.toString();
-                  accountnum = account.text.toString().length;
-                  passnum = pass.text.toString().length;
-
-                  if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.length == 0) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Message"),
-                            content: Text("Your format is wrong."),
-                            actions: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("OK"))
-                            ],
-                          );
-                        });
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text("Message"),
-                            content: Text("Log in success."),
-                            actions: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    _remember();
-                                    Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
-                                  },
-                                  child: Text("OK"))
-                            ],
-                          );
-                        });
-                    num++;
-                  }
-                },
-                child: Text("Sign Up")),
+            FutureBuilder(
+              future: _getNum(),
+              builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+                if(!snapshot.hasData){
+                  return ElevatedButton(onPressed: null, child: Text("Sign up"),);
+                }else{
+                  return ElevatedButton(
+                      onPressed: () {
+                        var accountnum;
+                        var passnum;
+                        var name;
+                        name = nickname.text.toString();
+                        accountnum = account.text.toString().length;
+                        passnum = pass.text.toString().length;
+                        if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.length == 0) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("Message"),
+                                  content: Text("Your format is wrong."),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("OK"))
+                                  ],
+                                );
+                              });
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("Message"),
+                                  content: Text("Log in success."),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () async{
+                                          await _remember();
+                                          Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
+                                        },
+                                        child: Text("OK"))
+                                  ],
+                                );
+                              });
+                        }
+                      },
+                      child: Text("Sign Up"));
+                }
+              },
+            )
           ],
         ),
       ),
