@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/account.dart';
+import 'package:untitled/chatroom.dart';
 import 'package:untitled/home.dart';
 import 'package:untitled/personal.dart';
 import 'package:untitled/search.dart';
 import 'package:untitled/signup.dart';
+import 'package:untitled/takepic.dart';
 
-import 'Bpage.dart';
+import 'member.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         "search": (BuildContext context) => new search(),
         "account": (BuildContext context) => new account(),
         "sign": (BuildContext context) => new signup(),
+        "pic" : (BuildContext) => new takepic(),
+        "chat": (BuildContext) => new chatroom(),
       },
       home: const MyHomePage(),
     );
@@ -48,22 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List pages = [
     home(),
     search(),
-    account(),
-    personal(),
+    member(),
   ];
-
-  @override
-  initState() {
-    super.initState();
-    _change();
-  }
-
-  _change() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      bool = (prefs.getBool("login") ?? false);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       currentIndex: _counter,
       onTap: (int index) {
         setState(() {
-            _counter = index;
-            if(bool){
-              pages.removeAt(2);
-              pages.add(personal());
-            }else{
-              pages.removeAt(2);
-              pages.add(account());
-            }
+          _counter = index;
         });
       },
     );

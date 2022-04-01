@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/chatroom.dart';
 
-import 'Bpage.dart';
+import 'member.dart';
 
 class home extends StatelessWidget {
   const home({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class Body extends StatelessWidget {
         Container(
           child: GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Bpage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => chatroom()));
               },
               child: Stack(
                 children: [

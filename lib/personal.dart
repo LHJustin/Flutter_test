@@ -16,18 +16,22 @@ class personal extends StatelessWidget {
 class Body extends StatelessWidget {
   var nickname;
   var account;
-  late List data;
+  List mem=[];
 
   Body({Key? key}) : super(key: key);
 
   Future<List> _data() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var id = await prefs.getInt("id");
-    nickname = await prefs.getString("name$id");
-    account = await prefs.getString("account$id");
-    data.add(nickname);
-    data.add(account);
-    return data;
+    var id = prefs.getInt("id");
+    nickname = prefs.getString("name$id");
+    account = prefs.getString("account$id");
+    print("id:$id");
+    print("nickname:$nickname");
+    print("account:$account");
+    mem.add(nickname);
+    mem.add(account);
+    print("mem:$mem");
+    return mem;
   }
 
   _log() async {
@@ -71,26 +75,27 @@ class Body extends StatelessWidget {
                 future: _data(),
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   if (!snapshot.hasData) {
+                    print("no data");
                     return Container();
-                  } else {
-                    return Container(
-                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-                      alignment: Alignment.center,
-                      child: (Column(
-                        children: [
-                          Image.asset("Images/pic_personal.png"),
-                          const SizedBox(
-                            height: 50.0,
-                          ),
-                          Text("Nickname:${data[0]}"),
-                          const SizedBox(
-                            height: 50.0,
-                          ),
-                          Text("Account:${data[1]}"),
-                        ],
-                      )),
-                    );
                   }
+                  print(snapshot.data);
+                  return Container(
+                    padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                    alignment: Alignment.center,
+                    child: (Column(
+                      children: [
+                        Image.asset("Images/pic_personal.png"),
+                        const SizedBox(
+                          height: 50.0,
+                        ),
+                        Text("Nickname:${mem[0]}"),
+                        const SizedBox(
+                          height: 50.0,
+                        ),
+                        Text("Account:${mem[1]}"),
+                      ],
+                    )),
+                  );
                 }),
           ],
         ),

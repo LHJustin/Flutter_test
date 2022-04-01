@@ -12,7 +12,7 @@ class signup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign up"),
+        title: Text("Sign Up"),
       ),
       body: Body(),
     );
@@ -35,7 +35,7 @@ class Body extends StatelessWidget {
     await prefs.setBool("login", true);
   }
 
-  Future<int> _getNum() async{
+  Future<int> _getNum() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     num = prefs.getInt("num") ?? 0;
     return num;
@@ -50,7 +50,21 @@ class Body extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Image.asset("Images/pic_personal.png"),
+            Stack(
+              children: [
+                Image.asset("Images/pic_personal.png"),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, "pic");
+                    },
+                    child: Image.asset("Images/btnedit.png",width: 28,height: 28,),
+                  ),
+                )
+              ],
+            ),
             const SizedBox(height: 24.0),
             TextField(
               decoration: const InputDecoration(
@@ -96,54 +110,64 @@ class Body extends StatelessWidget {
             const SizedBox(height: 16.0),
             FutureBuilder(
               future: _getNum(),
-              builder: (BuildContext context, AsyncSnapshot<int> snapshot){
-                if(!snapshot.hasData){
-                  return ElevatedButton(onPressed: null, child: Text("Sign up"),);
-                }else{
+              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                if (!snapshot.hasData) {
                   return ElevatedButton(
-                      onPressed: () {
-                        var accountnum;
-                        var passnum;
-                        var name;
-                        name = nickname.text.toString();
-                        accountnum = account.text.toString().length;
-                        passnum = pass.text.toString().length;
-                        if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.length == 0) {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text("Message"),
-                                  content: Text("Your format is wrong."),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("OK"))
-                                  ],
-                                );
-                              });
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text("Message"),
-                                  content: Text("Log in success."),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () async{
-                                          await _remember();
-                                          Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
-                                        },
-                                        child: Text("OK"))
-                                  ],
-                                );
-                              });
-                        }
-                      },
-                      child: Text("Sign Up"));
+                    onPressed: null,
+                    child: Text("Sign up"),
+                  );
+                } else {
+                  return ElevatedButton(
+                    onPressed: () {
+                      var accountnum;
+                      var passnum;
+                      var name;
+                      name = nickname.text.toString();
+                      accountnum = account.text.toString().length;
+                      passnum = pass.text.toString().length;
+                      if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.length == 0) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Message"),
+                                content: Text("Your format is wrong."),
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("OK"))
+                                ],
+                              );
+                            });
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Message"),
+                                content: Text("Log in success."),
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        await _remember();
+                                        Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
+                                      },
+                                      child: Text("OK"))
+                                ],
+                              );
+                            });
+                      }
+                    },
+                    child: const Text("Sign Up"),
+                    style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      shadowColor: Colors.orangeAccent,
+                      elevation: 8,
+                      padding: const EdgeInsets.fromLTRB(72, 0, 72, 0),
+                    ),
+                  );
                 }
               },
             )

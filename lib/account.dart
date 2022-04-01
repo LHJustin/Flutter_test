@@ -28,13 +28,12 @@ class Body extends StatelessWidget {
   @override
   _check() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefcount = await prefs.getString("account$i") ?? "";
-    prefpass = await prefs.getString("password$i") ?? "";
-    await prefs.setInt("id", i);
+    prefcount = prefs.getString("account$i") ?? "";
+    prefpass = prefs.getString("password$i") ?? "";
     print("account:$prefcount");
   }
 
-  _num() async{
+  _num() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     num = await prefs.getInt("num") ?? 0;
     print("num:$num");
@@ -42,7 +41,8 @@ class Body extends StatelessWidget {
 
   _log() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("login", true);
+    await prefs.setInt("id", i);
+    await prefs.setBool("login", true);
   }
 
   @override
@@ -80,50 +80,65 @@ class Body extends StatelessWidget {
                 filled: true,
                 fillColor: Color.fromARGB(216, 144, 210, 220),
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightBlue)),//輸入文字時的變化
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightBlue)), //輸入文字時的變化
               ),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],//填寫格式設計
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))], //填寫格式設計
               //看不到內容（密碼格式）
               obscureText: true,
               controller: pass,
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-                onPressed: () async{
-                  var accountword = account.text.toString();
-                  var password = pass.text.toString();
-                  await _num();
-                  for (i=0; i <= num; i++) {
-                    await _check();
-                    if (accountword==prefcount && password==prefpass && accountword!="" && password!="") {
-                      await _log();
-                      Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Message"),
-                              content: Text("Your account or password is wrong."),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("OK"))
-                              ],
-                            );
-                          });
-                    }
+              onPressed: () async {
+                var accountword = account.text.toString();
+                var password = pass.text.toString();
+                var y = 0;
+                await _num();
+                for (i = 0; i <= num; i++) {
+                  await _check();
+                  if (accountword == prefcount && password == prefpass && accountword != "" && password != "") {
+                    await _log();
+                    y = y + 1;
                   }
-                },
-                child: Text("Log In")),
+                }
+                if (y > 0) {
+                  Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Message"),
+                          content: Text("Your account or password is wrong."),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("OK"))
+                          ],
+                        );
+                      });
+                }
+              },
+              child: Text("Log In"),
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                shadowColor: Colors.orangeAccent,
+                elevation: 8,
+                padding: EdgeInsets.fromLTRB(72, 0, 72, 0),
+              ),
+            ),
             const SizedBox(height: 8.0),
             TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'sign');
-                },
-                child: const Text("Sign Up"))
+              onPressed: () {
+                Navigator.pushNamed(context, 'sign');
+              },
+              child: const Text("Sign Up"),
+              style: TextButton.styleFrom(
+                primary: Color.fromARGB(255, 131, 15, 213),
+              ),
+            ),
           ],
         ),
       ),
