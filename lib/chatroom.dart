@@ -17,18 +17,20 @@ class _chatroomState extends State<chatroom> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset("Images/hime3.mp4");
+    _controller = VideoPlayerController.asset("Images/hime3.mp4")
+    ..initialize().then((_) {
     setState(() {});
     _controller.play();
     _controller.setLooping(true);
     // _controller.setVolume(0.0);
     Timer.periodic(Duration(seconds: 180), (Timer time) {
-      print(time);
+    print(time);
+    });
     });
   }
 
   void disponse() {
-    // TODO: implement dispose
+    //TODO: implement dispose
     super.dispose();
     _controller.pause();
   }
@@ -43,7 +45,7 @@ class _chatroomState extends State<chatroom> {
             scale: _controller.value.aspectRatio / MediaQuery.of(context).size.aspectRatio,
             child: Center(
               child: Container(
-                child: _controller.value.initialized
+                child: _controller.value.isInitialized
                     ? AspectRatio(
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(_controller),
