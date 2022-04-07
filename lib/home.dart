@@ -18,22 +18,40 @@ class home extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
-  
-  Future<List<program>> getProgram() async{
-    Response response;
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  List jlist = [];
+
+  @override
+  void initState() {
+    getProgram();
+  }
+
+  Future<List<LightyearList>> getProgram() async {
     var dio = Dio();
-    response = await dio.get("https://api.jsonserve.com/qHsaqy",options: Options(responseType: ResponseType.plain));
-    var jlist = jsonDecode(response.data);
-    var programList = jlist.map((m)=>LightyearList.fromJson(m)).toList();
-    print("data:${programList.nickname}");
-    return programList;
+    Response response = await dio.get('https://api.jsonserve.com/qHsaqy');
+    print('${response.data['result']['lightyear_list'].length}');
+    List<dynamic> jlist = response.data['result']['lightyear_list'];
+    jlist.forEach(( element) {
+       Map<String, dynamic> map = element;
+      print('$map');
+    });
+    List<LightyearList> programlist = [];
+    for(Map<String, dynamic> i in jlist){
+      programlist.add (LightyearList.fromJson(i));
+    }
+    // var programList = response.data['result']['lightyear_list'].map((m) => new LightyearList.fromJson(m)).toList();
+    return programlist;
   }
 
   @override
-  Widget build(BuildContext context){
-    getProgram();
+  Widget build(BuildContext context) {
     return GridView.count(
       primary: false,
       padding: const EdgeInsets.all(5),
@@ -43,46 +61,47 @@ class Body extends StatelessWidget {
       children: <Widget>[
         FutureBuilder(
           future: getProgram(),
-            builder: (BuildContext context, AsyncSnapshot<List> snapshot){
-              if (!snapshot.hasData) {
-                print("no data");
-                return Container();
-              }
-              print(snapshot.data);
-              return Container(
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => chatroom()));
-                    },
-                    child: Stack(
-                      children: [
-                        FadeInImage.assetNetwork(placeholder: "Images/mm.jpg", image: "https://storage.googleapis.com/lottcube/production/1/headphoto/headphoto1644397354.png"),
-                        Column(
-                          children: const [
-                            Text(
-                              "data",
-                              style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
-                            )
-                          ],
-                        ),
-                        Column(
-                          verticalDirection: VerticalDirection.up,
-                          children: [
-                            Text(
-                              "cc",
-                              style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
-                            ),
-                            Text(
-                              "data",
-                              style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
-                            ),
-                          ],
+          builder: (BuildContext context, AsyncSnapshot<List<LightyearList>> snapshot){
+            if (!snapshot.hasData) {
+              print("no data");
+              return Container();
+            }
+            print(snapshot.data?[0].streamId);
+            return Container(
+              color: Colors.purple,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => chatroom()));
+                },
+                child: Stack(
+                  children: [
+                    FadeInImage.assetNetwork(placeholder: "Images/mm.jpg", image: "https://storage.googleapis.com/lottcube/production/1/headphoto/headphoto1644397354.png"),
+                    Column(
+                      children: const [
+                        Text(
+                          "data",
+                          style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
                         )
                       ],
-                    )),
-                color: Colors.purple,
-              );
-            }
+                    ),
+                    Column(
+                      verticalDirection: VerticalDirection.up,
+                      children: [
+                        Text(
+                          "cc",
+                          style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 30),
+                        ),
+                        Text(
+                          "data",
+                          style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         )
       ],
     );

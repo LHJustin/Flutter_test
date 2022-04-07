@@ -225,4 +225,9 @@ class LightyearList {
     data['open_guardians'] = this.openGuardians;
     return data;
   }
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'stream_id: $streamId, hiurfhuirhfiuhhrhu';
+  }
 }
