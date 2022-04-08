@@ -18,15 +18,15 @@ class _chatroomState extends State<chatroom> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.asset("Images/hime3.mp4")
-    ..initialize().then((_) {
-    setState(() {});
-    _controller.play();
-    _controller.setLooping(true);
-    // _controller.setVolume(0.0);
-    Timer.periodic(Duration(seconds: 180), (Timer time) {
-    print(time);
-    });
-    });
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.play();
+        _controller.setLooping(true);
+        // _controller.setVolume(0.0);
+        Timer.periodic(Duration(seconds: 180), (Timer time) {
+          print(time);
+        });
+      });
   }
 
   void disponse() {
@@ -41,6 +41,7 @@ class _chatroomState extends State<chatroom> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
+          //背景影片
           Transform.scale(
             scale: _controller.value.aspectRatio / MediaQuery.of(context).size.aspectRatio,
             child: Center(
@@ -54,8 +55,44 @@ class _chatroomState extends State<chatroom> {
               ),
             ),
           ),
+          Column(
+            verticalDirection: VerticalDirection.up,
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                children: [
+                  SizedBox(width: 15,),
+                  //對話框，不用expanded讓內容讓textfield物件彈性一點畫面會爆掉
+                  Expanded(
+                    child: TextField(),
+                  ),
+                  //送出對話按鈕
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: (){},
+                      child: Icon(Icons.send),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView(),
+              ),
+            ],
+          ),
         ],
       ),
+      //離開按鈕
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        backgroundColor: Color.fromARGB(116, 236, 217, 70),
+        child: Icon(Icons.exit_to_app),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }

@@ -40,7 +40,7 @@ class _BodyState extends State<Body> {
     List<dynamic> jlist = response.data['result']['lightyear_list'];
     jlist.forEach((element) {
       Map<String, dynamic> map = element;
-      print('$map');
+      // print('$map');
     });
     List<LightyearList> programlist = [];
     for (Map<String, dynamic> i in jlist) {
