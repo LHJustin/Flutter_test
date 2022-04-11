@@ -12,7 +12,7 @@ class home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Body(),
     );
   }
@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
             for (int i = 0; i < snapshot.data!.length; i++)
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => chatroom()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const chatroom()));
                 },
                 child: Container(
                   color: Colors.purple,
@@ -85,7 +85,7 @@ class _BodyState extends State<Body> {
                         children: [
                           Text(
                             '${snapshot.data![i].streamTitle}',
-                            style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 20),
+                            style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 20),
                           )
                         ],
                       ),
@@ -94,11 +94,11 @@ class _BodyState extends State<Body> {
                         children: [
                           Text(
                             "${snapshot.data![i].nickname}",
-                            style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 24),
+                            style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 24),
                           ),
                           Text(
                             "${snapshot.data![i].tags}",
-                            style: TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
+                            style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
                           ),
                         ],
                       )

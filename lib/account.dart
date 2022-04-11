@@ -25,7 +25,8 @@ class Body extends StatelessWidget {
   var prefcount;
   var prefpass;
 
-  @override
+  Body({Key? key}) : super(key: key);
+
   _check() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefcount = prefs.getString("account$i") ?? "";
@@ -35,7 +36,7 @@ class Body extends StatelessWidget {
 
   _num() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    num = await prefs.getInt("num") ?? 0;
+    num = prefs.getInt("num") ?? 0;
     print("num:$num");
   }
 
@@ -108,25 +109,25 @@ class Body extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text("Message"),
-                          content: Text("Your account or password is wrong."),
+                          title: const Text("Message"),
+                          content: const Text("Your account or password is wrong."),
                           actions: [
                             ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("OK"))
+                                child: const Text("OK"))
                           ],
                         );
                       });
                 }
               },
-              child: Text("Log In"),
+              child: const Text("Log In"),
               style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
                 shadowColor: Colors.orangeAccent,
                 elevation: 8,
-                padding: EdgeInsets.fromLTRB(72, 0, 72, 0),
+                padding: const EdgeInsets.fromLTRB(72, 0, 72, 0),
               ),
             ),
             const SizedBox(height: 8.0),
@@ -136,7 +137,7 @@ class Body extends StatelessWidget {
               },
               child: const Text("Sign Up"),
               style: TextButton.styleFrom(
-                primary: Color.fromARGB(255, 131, 15, 213),
+                primary: const Color.fromARGB(255, 131, 15, 213),
               ),
             ),
           ],

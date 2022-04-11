@@ -1,7 +1,14 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/json/jsonclose.dart';
+import 'package:untitled/json/jsoninto.dart';
+import 'package:untitled/json/jsonmessage.dart';
+import 'package:untitled/json/jsonnoticce.dart';
+import 'package:untitled/json/jsonsend.dart';
 import 'package:video_player/video_player.dart';
 
 class chatroom extends StatefulWidget {
@@ -12,11 +19,16 @@ class chatroom extends StatefulWidget {
 }
 
 class _chatroomState extends State<chatroom> {
+  final msg = TextEditingController();
   var _controller;
+  var name;
+  var dio = Dio();
+  List msglist = [];
 
   @override
   void initState() {
     super.initState();
+    link();
     _controller = VideoPlayerController.asset("Images/hime3.mp4")
       ..initialize().then((_) {
         setState(() {});
@@ -27,6 +39,28 @@ class _chatroomState extends State<chatroom> {
           print(time);
         });
       });
+  }
+
+  link() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var iflog = prefs.getBool('login') ?? false;
+    if (iflog) {
+      var id = prefs.getInt("id");
+      name = prefs.getString("name$id");
+    } else {
+      name = "visitor";
+    }
+  }
+
+  Future<List> getMessage() async {
+    print(name);
+    Response resget = await dio.get('wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name');
+    var talk = message.fromJson(resget.data);
+    var enter = into.fromJson(resget.data);
+    var broadcast = notice.fromJson(resget.data);
+    var end = close.fromJson(resget.data);
+    msglist.add(talk.body?.nickname);
+    return msglist;
   }
 
   void disponse() {
@@ -63,22 +97,75 @@ class _chatroomState extends State<chatroom> {
               ),
               Row(
                 children: [
-                  SizedBox(width: 15,),
+                  SizedBox(
+                    width: 15,
+                  ),
                   //對話框，不用expanded讓內容讓textfield物件彈性一點畫面會爆掉
                   Expanded(
-                    child: TextField(),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "send message",
+                        filled: true,
+                        fillColor: Color.fromARGB(89, 90, 90, 90),
+                      ),
+                      controller: msg,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
                   ),
                   //送出對話按鈕
                   Container(
                     child: ElevatedButton(
-                      onPressed: (){},
-                      child: Icon(Icons.send),
+                      onPressed: () async {
+                        print(name);
+                        Response respost = await dio.post(
+                          "wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name",
+                          data: send().toJson("N", msg.text.toString()),
+                        );
+                        print("aaaaaaa:$respost");
+                      },
+                      child: const Icon(Icons.send),
+                      style: ElevatedButton.styleFrom(shape: const CircleBorder(), padding: const EdgeInsets.all(13)),
                     ),
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView(),
+              FutureBuilder(
+                future: getMessage(),
+                builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+                  if (!snapshot.hasData) {
+                    print("no data");
+                    return Container();
+                  }
+                  return //限制ListView最大高度
+                      ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 175.0),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 80, 0),
+                      child: Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          reverse: true,
+                          children: [
+                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
+                            Text("hehehe"),
+                            Text("hohoho"),
+                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
+                            Text("hehehe"),
+                            Text("hohoho"),
+                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
+                            Text("hehehe"),
+                            Text("hohoho"),
+                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
+                            Text("hehehe"),
+                            Text("hohoho"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

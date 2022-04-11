@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +11,7 @@ class signup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign Up"),
+        title: const Text("Sign Up"),
       ),
       body: Body(),
     );
@@ -24,6 +23,8 @@ class Body extends StatelessWidget {
   final account = TextEditingController();
   final pass = TextEditingController();
   var num;
+
+  Body({Key? key}) : super(key: key);
 
   _remember() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -112,32 +113,32 @@ class Body extends StatelessWidget {
               future: _getNum(),
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                 if (!snapshot.hasData) {
-                  return ElevatedButton(
+                  return const ElevatedButton(
                     onPressed: null,
                     child: Text("Sign up"),
                   );
                 } else {
                   return ElevatedButton(
                     onPressed: () {
-                      var accountnum;
-                      var passnum;
-                      var name;
+                      int accountnum;
+                      int passnum;
+                      String name;
                       name = nickname.text.toString();
                       accountnum = account.text.toString().length;
                       passnum = pass.text.toString().length;
-                      if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.length == 0) {
+                      if (accountnum < 4 || accountnum > 20 || passnum < 6 || passnum > 12 || name.isEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Message"),
-                                content: Text("Your format is wrong."),
+                                title: const Text("Message"),
+                                content: const Text("Your format is wrong."),
                                 actions: [
                                   ElevatedButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text("OK"))
+                                      child: const Text("OK"))
                                 ],
                               );
                             });
@@ -146,15 +147,15 @@ class Body extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Message"),
-                                content: Text("Log in success."),
+                                title: const Text("Message"),
+                                content: const Text("Log in success."),
                                 actions: [
                                   ElevatedButton(
                                       onPressed: () async {
                                         await _remember();
                                         Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
                                       },
-                                      child: Text("OK"))
+                                      child: const Text("OK"))
                                 ],
                               );
                             });

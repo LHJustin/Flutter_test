@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.yellow,
       ),
       routes: <String, WidgetBuilder>{
-        "my": (BuildContext context) => new MyHomePage(),
-        "home": (BuildContext context) => new home(),
-        "search": (BuildContext context) => new search(),
-        "account": (BuildContext context) => new account(),
-        "sign": (BuildContext context) => new signup(),
-        "pic" : (BuildContext) => new takepic(),
-        "chat": (BuildContext) => new chatroom(),
+        "my": (BuildContext context) => const MyHomePage(),
+        "home": (BuildContext context) => const home(),
+        "search": (BuildContext context) => const search(),
+        "account": (BuildContext context) => const account(),
+        "sign": (BuildContext context) => const signup(),
+        "pic" : (BuildContext context) => const takepic(),
+        "chat": (BuildContext context) => const chatroom(),
       },
       home: const MyHomePage(),
     );
@@ -48,25 +48,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  var bool;
   List pages = [
-    home(),
-    search(),
-    member(),
+    const home(),
+    const search(),
+    const member(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Test'),
+        title: const Text('Flutter Test'),
       ),
       body: pages[_counter],
       bottomNavigationBar: button(),
     );
   }
 
-  @override
   Widget button() {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
