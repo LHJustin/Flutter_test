@@ -39,6 +39,8 @@ dependencies:
   shared_preferences: ^2.0.13
   video_player: ^2.3.0
   json_annotation: ^4.4.0
+  web_socket_channel: ^2.1.0
+  image_picker: ^0.8.5
 
 dev_dependencies:
   flutter_test:

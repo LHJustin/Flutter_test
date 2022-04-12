@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:untitled/json/jsonmessage.dart';
 import 'package:untitled/json/jsonnoticce.dart';
 import 'package:untitled/json/jsonsend.dart';
 import 'package:video_player/video_player.dart';
+import 'package:web_socket_channel/io.dart';
 
 class chatroom extends StatefulWidget {
   const chatroom({Key? key}) : super(key: key);
@@ -23,6 +25,7 @@ class _chatroomState extends State<chatroom> {
   var _controller;
   var name;
   var dio = Dio();
+  var channel;
   List msglist = [];
 
   @override
@@ -50,16 +53,26 @@ class _chatroomState extends State<chatroom> {
     } else {
       name = "visitor";
     }
+    channel= IOWebSocketChannel.connect('wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name');
   }
 
   Future<List> getMessage() async {
-    print(name);
-    Response resget = await dio.get('wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name');
-    var talk = message.fromJson(resget.data);
-    var enter = into.fromJson(resget.data);
-    var broadcast = notice.fromJson(resget.data);
-    var end = close.fromJson(resget.data);
-    msglist.add(talk.body?.nickname);
+    message talk;
+    var enter;
+    var broadcast;
+    var end;
+    channel.stream.listen((data){
+      print("aaaaaa:$data");
+      if({"event":"default_message"} == data){
+        talk = message.fromJson(data);
+      }else if({"event":"sys_updateRoomStatus"} == data){
+        enter = into.fromJson(data);
+      }else if({"event":"admin_all_broadcast"} == data){
+        broadcast = notice.fromJson(data);
+      }else if({"event":"sys_room_endStream"} == data){
+        end = close.fromJson(data);
+      }
+    });
     return msglist;
   }
 
@@ -119,11 +132,7 @@ class _chatroomState extends State<chatroom> {
                     child: ElevatedButton(
                       onPressed: () async {
                         print(name);
-                        Response respost = await dio.post(
-                          "wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name",
-                          data: send().toJson("N", msg.text.toString()),
-                        );
-                        print("aaaaaaa:$respost");
+                        channel.sink.add(send(action: "N", content: msg.text.toString()));
                       },
                       child: const Icon(Icons.send),
                       style: ElevatedButton.styleFrom(shape: const CircleBorder(), padding: const EdgeInsets.all(13)),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class takepic extends StatelessWidget {
   const takepic({Key? key}) : super(key: key);
@@ -15,8 +16,15 @@ class takepic extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  var image;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,12 @@ class Body extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () async{
+              image = await ImagePicker.pickImage(source: ImageSource.gallery);
+              setState((){
+
+              });
+            },
             child: const Text("from photos"),
             style: ElevatedButton.styleFrom(
               shape: BeveledRectangleBorder(
@@ -43,7 +56,12 @@ class Body extends StatelessWidget {
             height: 32,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () async{
+              image = await ImagePicker.pickImage(source: ImageSource.camera);
+              setState((){
+
+              });
+            },
             child: const Text("take a photo"),
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),

@@ -12,7 +12,7 @@ class send {
     content : json['content'],
   );
 
-  Map<String, dynamic> toJson(action,content) {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['action'] = this.action;
     data['content'] = this.content;
