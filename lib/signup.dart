@@ -1,3 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,19 +24,34 @@ class signup extends StatelessWidget {
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  const Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+StreamController<File> streamController = StreamController<File>.broadcast();
+
+class _BodyState extends State<Body> {
+  @override
+  void initState() {
+    super.initState();
+    // streamController.
+  }
+
   final nickname = TextEditingController();
   final account = TextEditingController();
   final pass = TextEditingController();
   var num;
-
-  Body({Key? key}) : super(key: key);
+  String? image;
 
   _remember() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("name$num", nickname.text.toString());
     await prefs.setString("account$num", account.text.toString());
     await prefs.setString("password$num", pass.text.toString());
+    await prefs.setString("pic$num", image!);
     await prefs.setInt("id", num);
     await prefs.setInt("num", ++num);
     await prefs.setBool("login", true);
@@ -53,7 +74,24 @@ class Body extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: [
-                Image.asset("Images/pic_personal.png"),
+                StreamBuilder(
+                    stream: streamController.stream,
+                    // initialData: File("Images/pic_personal.png"),
+                    builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+                      if (snapshot.data != null) {
+                        //readAsBytes讓snapshot的file資料變成Uint8List的資料類型，再用base64Encode讓image可以是一個String
+                        snapshot.data!.readAsBytes().then((value) {
+                          image = base64Encode(value);
+                        });
+                        return Image.file(snapshot.data!);
+                      } else {
+                        return Image.asset("Images/pic_personal.png");
+                      }
+                    }),
+                /* if(image != null)
+                  Image.memory(image!),
+                if(image == null)
+                  ,*/
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -61,7 +99,11 @@ class Body extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(context, "pic");
                     },
-                    child: Image.asset("Images/btnedit.png",width: 28,height: 28,),
+                    child: Image.asset(
+                      "Images/btnedit.png",
+                      width: 28,
+                      height: 28,
+                    ),
                   ),
                 )
               ],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +17,8 @@ class personal extends StatelessWidget {
 class Body extends StatelessWidget {
   var nickname;
   var account;
-  List mem=[];
+  var image;
+  List mem = [];
 
   Body({Key? key}) : super(key: key);
 
@@ -24,11 +27,13 @@ class Body extends StatelessWidget {
     var id = prefs.getInt("id");
     nickname = prefs.getString("name$id");
     account = prefs.getString("account$id");
+    image = prefs.getString("pic$id");
     print("id:$id");
     print("nickname:$nickname");
     print("account:$account");
     mem.add(nickname);
     mem.add(account);
+    mem.add(image);
     print("mem:$mem");
     return mem;
   }
@@ -83,7 +88,8 @@ class Body extends StatelessWidget {
                     alignment: Alignment.center,
                     child: (Column(
                       children: [
-                        Image.asset("Images/pic_personal.png"),
+                        if (mem[2] == null) Image.asset("Images/pic_personal.png"),
+                        if (mem[2] != null) Image.memory(base64Decode(mem[2])),
                         const SizedBox(
                           height: 50.0,
                         ),
