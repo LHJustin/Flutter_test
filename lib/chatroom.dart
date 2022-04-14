@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/json/jsonclose.dart';
 import 'package:untitled/json/jsoninto.dart';
@@ -12,6 +13,7 @@ import 'package:untitled/json/jsonnoticce.dart';
 import 'package:untitled/json/jsonsend.dart';
 import 'package:video_player/video_player.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class chatroom extends StatefulWidget {
   const chatroom({Key? key}) : super(key: key);
@@ -23,10 +25,9 @@ class chatroom extends StatefulWidget {
 class _chatroomState extends State<chatroom> {
   final msg = TextEditingController();
   var _controller;
-  var name;
+  String? name;
   var dio = Dio();
-  var channel;
-  List msglist = [];
+  WebSocketChannel? channel;
 
   @override
   void initState() {
@@ -38,13 +39,13 @@ class _chatroomState extends State<chatroom> {
         _controller.play();
         _controller.setLooping(true);
         // _controller.setVolume(0.0);
-        Timer.periodic(Duration(seconds: 180), (Timer time) {
-          print(time);
+        Timer.periodic(const Duration(seconds: 180), (Timer time) {
+          // print(time);
         });
       });
   }
 
-  link() async {
+  Future<bool> link() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var iflog = prefs.getBool('login') ?? false;
     if (iflog) {
@@ -53,33 +54,16 @@ class _chatroomState extends State<chatroom> {
     } else {
       name = "visitor";
     }
-    channel= IOWebSocketChannel.connect('wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name');
-  }
-
-  Future<List> getMessage() async {
-    message talk;
-    var enter;
-    var broadcast;
-    var end;
-    channel.stream.listen((data){
-      print("aaaaaa:$data");
-      if({"event":"default_message"} == data){
-        talk = message.fromJson(data);
-      }else if({"event":"sys_updateRoomStatus"} == data){
-        enter = into.fromJson(data);
-      }else if({"event":"admin_all_broadcast"} == data){
-        broadcast = notice.fromJson(data);
-      }else if({"event":"sys_room_endStream"} == data){
-        end = close.fromJson(data);
-      }
-    });
-    return msglist;
+    channel = IOWebSocketChannel.connect(
+      Uri.parse('wss://lott-dev.lottcube.asia/ws/chat/chat:app_test?nickname=$name'),
+    );
+    return true;
   }
 
   void disponse() {
-    //TODO: implement dispose
     super.dispose();
     _controller.pause();
+    channel!.sink.close();
   }
 
   @override
@@ -98,7 +82,7 @@ class _chatroomState extends State<chatroom> {
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(_controller),
                       )
-                    : Text("正在初始化"),
+                    : const Text("正在初始化"),
               ),
             ),
           ),
@@ -110,69 +94,93 @@ class _chatroomState extends State<chatroom> {
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   //對話框，不用expanded讓內容讓textfield物件彈性一點畫面會爆掉
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "send message",
                         filled: true,
                         fillColor: Color.fromARGB(89, 90, 90, 90),
                       ),
+                      inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ~!#\$%^&*()_-+=?<>.—，。/\\|《》？;:：\'‘；“]'))],
                       controller: msg,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   //送出對話按鈕
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        print(name);
-                        channel.sink.add(send(action: "N", content: msg.text.toString()));
-                      },
-                      child: const Icon(Icons.send),
-                      style: ElevatedButton.styleFrom(shape: const CircleBorder(), padding: const EdgeInsets.all(13)),
-                    ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      //訊息傳入websockets
+                      channel!.sink.add(json.encode(send(action: "N", content: msg.text.toString())));
+                      msg.clear();
+                    },
+                    child: const Icon(Icons.send),
+                    style: ElevatedButton.styleFrom(shape: const CircleBorder(), padding: const EdgeInsets.all(13)),
                   ),
                 ],
               ),
               FutureBuilder(
-                future: getMessage(),
-                builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-                  if (!snapshot.hasData) {
-                    print("no data");
-                    return Container();
-                  }
-                  return //限制ListView最大高度
-                      ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 175.0),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 80, 0),
-                      child: Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          reverse: true,
-                          children: [
-                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
-                            Text("hehehe"),
-                            Text("hohoho"),
-                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
-                            Text("hehehe"),
-                            Text("hohoho"),
-                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
-                            Text("hehehe"),
-                            Text("hohoho"),
-                            Text("hahahahahahahahahahahahahahahahahahahahahahahaha"),
-                            Text("hehehe"),
-                            Text("hohoho"),
-                          ],
-                        ),
-                      ),
-                    ),
+                future: link(),
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  return StreamBuilder(
+                    stream: channel!.stream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        print("no data");
+                        return Container();
+                      } else {
+                        print("test:${snapshot.data.toString()}");
+                        var response = jsonDecode(snapshot.data.toString());
+                        List msglist = [];
+                        if(snapshot.data.toString().contains("undefined")) {
+                          msglist.add("invalid message.");
+                        }
+                        if (snapshot.data.toString().contains("default_message")) {
+                          message talk = message.fromJson(response);
+                          msglist.add("${talk.body?.nickname}：${talk.body?.text}");
+                        } else if (snapshot.data.toString().contains("sys_updateRoomStatus")) {
+                          into enter = into.fromJson(response);
+                          if (enter.body?.entryNotice?.action == "enter") {
+                            msglist.add("${enter.body?.entryNotice?.username} enter the room.");
+                          }
+                          if(enter.body?.entryNotice?.action == "leave") {
+                            msglist.add("${enter.body?.entryNotice?.username} leave the room.");
+                          }
+                        } else if (snapshot.data.toString().contains("admin_all_broadcast")) {
+                          notice broadcast = notice.fromJson(response);
+                          msglist.add("cn：${broadcast.body?.content?.cn}\nen：${broadcast.body?.content?.en}\ntw：${broadcast.body?.content?.tw}");
+                        } else if (snapshot.data.toString().contains("sys_room_endStream")) {
+                          close end = close.fromJson(response);
+                          msglist.add("${end.body?.text}");
+                        }
+                        //限制ListView最大高度
+                        return ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 175.0),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 80, 0),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    reverse: true,
+                                    children: [
+                                      for(var text in msglist)
+                                        Text("$text"),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   );
                 },
               ),
@@ -185,8 +193,8 @@ class _chatroomState extends State<chatroom> {
         onPressed: () {
           Navigator.pop(context);
         },
-        backgroundColor: Color.fromARGB(116, 236, 217, 70),
-        child: Icon(Icons.exit_to_app),
+        backgroundColor: const Color.fromARGB(116, 236, 217, 70),
+        child: const Icon(Icons.exit_to_app),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );

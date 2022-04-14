@@ -34,12 +34,6 @@ class Body extends StatefulWidget {
 StreamController<File> streamController = StreamController<File>.broadcast();
 
 class _BodyState extends State<Body> {
-  @override
-  void initState() {
-    super.initState();
-    // streamController.
-  }
-
   final nickname = TextEditingController();
   final account = TextEditingController();
   final pass = TextEditingController();
@@ -76,7 +70,6 @@ class _BodyState extends State<Body> {
               children: [
                 StreamBuilder(
                     stream: streamController.stream,
-                    // initialData: File("Images/pic_personal.png"),
                     builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
                       if (snapshot.data != null) {
                         //readAsBytes讓snapshot的file資料變成Uint8List的資料類型，再用base64Encode讓image可以是一個String

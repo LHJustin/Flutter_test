@@ -27,7 +27,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List jlist = [];
-
   String search = "";
 
   Future<List<LightyearList>> getProgram() async {
