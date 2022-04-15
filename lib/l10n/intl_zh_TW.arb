@@ -1,0 +1,19 @@
+{
+  "home": "首頁",
+  "search": "搜尋",
+  "account": "會員",
+  "searchResult": "搜尋結果",
+  "mostView":"熱門影片",
+  "logIn":"登入",
+  "accountnum":"帳號",
+  "password":"密碼",
+  "enteraccount":"輸入4~20個字",
+  "enterpass":"輸入6~12個字",
+  "signUp":"註冊",
+  "message":"訊息提示",
+  "wrong":"你的帳號或密碼可能錯誤。",
+  "nickname":"暱稱",
+  "enternick":"內容不能是空的",
+  "wrongformat":"你的格式錯誤。",
+  "success":"登入成功。"
+}

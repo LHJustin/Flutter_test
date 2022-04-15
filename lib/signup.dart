@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/generated/l10n.dart';
 import 'package:untitled/home.dart';
 import 'package:untitled/main.dart';
 
@@ -17,7 +17,7 @@ class signup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign Up"),
+        title: Text(S.of(context).signUp),
       ),
       body: Body(),
     );
@@ -103,42 +103,42 @@ class _BodyState extends State<Body> {
             ),
             const SizedBox(height: 24.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'nickname',
-                labelStyle: TextStyle(color: Colors.black),
-                hintText: "Textbox can't empty",
+              decoration: InputDecoration(
+                labelText: S.of(context).nickname,
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: S.of(context).enternick,
                 filled: true,
-                fillColor: Color.fromARGB(216, 202, 164, 255),
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
+                fillColor: const Color.fromARGB(216, 202, 164, 255),
+                border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
               ),
               inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
               controller: nickname,
             ),
             const SizedBox(height: 16.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'account',
-                labelStyle: TextStyle(color: Colors.black),
-                hintText: 'enter 4~20 words',
+              decoration: InputDecoration(
+                labelText: S.of(context).accountnum,
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: S.of(context).enteraccount,
                 filled: true,
-                fillColor: Color.fromARGB(201, 246, 126, 181),
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
+                fillColor: const Color.fromARGB(201, 246, 126, 181),
+                border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
               ),
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
               controller: account,
             ),
             const SizedBox(height: 16.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'password',
-                labelStyle: TextStyle(color: Colors.black),
-                hintText: 'enter 6~12 words',
+              decoration: InputDecoration(
+                labelText: S.of(context).password,
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: S.of(context).enterpass,
                 filled: true,
-                fillColor: Color.fromARGB(201, 246, 126, 181),
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
+                fillColor: const Color.fromARGB(201, 246, 126, 181),
+                border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.purpleAccent)),
               ),
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
               controller: pass,
@@ -148,9 +148,9 @@ class _BodyState extends State<Body> {
               future: _getNum(),
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                 if (!snapshot.hasData) {
-                  return const ElevatedButton(
+                  return ElevatedButton(
                     onPressed: null,
-                    child: Text("Sign up"),
+                    child: Text(S.of(context).signUp),
                   );
                 } else {
                   return ElevatedButton(
@@ -166,14 +166,15 @@ class _BodyState extends State<Body> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Message"),
-                                content: const Text("Your format is wrong."),
+                                title: Text(S.of(context).message),
+                                content: Text(S.of(context).wrongformat),
                                 actions: [
                                   ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("OK"))
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("OK"),
+                                  ),
                                 ],
                               );
                             });
@@ -182,15 +183,16 @@ class _BodyState extends State<Body> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Message"),
-                                content: const Text("Log in success."),
+                                title: Text(S.of(context).message),
+                                content: Text(S.of(context).success),
                                 actions: [
                                   ElevatedButton(
-                                      onPressed: () async {
-                                        await _remember();
-                                        Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
-                                      },
-                                      child: const Text("OK"))
+                                    onPressed: () async {
+                                      await _remember();
+                                      Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
+                                    },
+                                    child: const Text("OK"),
+                                  ),
                                 ],
                               );
                             });

@@ -28,6 +28,7 @@ class _chatroomState extends State<chatroom> {
   String? name;
   var dio = Dio();
   WebSocketChannel? channel;
+  List msglist = [];
 
   @override
   void initState() {
@@ -105,7 +106,7 @@ class _chatroomState extends State<chatroom> {
                         filled: true,
                         fillColor: Color.fromARGB(89, 90, 90, 90),
                       ),
-                      inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ~!#\$%^&*()_-+=?<>.—，。/\\|《》？;:：\'‘；“]'))],
+                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z\u4e00-\u9fa50-9]"))],
                       controller: msg,
                     ),
                   ),
@@ -120,7 +121,10 @@ class _chatroomState extends State<chatroom> {
                       msg.clear();
                     },
                     child: const Icon(Icons.send),
-                    style: ElevatedButton.styleFrom(shape: const CircleBorder(), padding: const EdgeInsets.all(13)),
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(13),
+                    ),
                   ),
                 ],
               ),
@@ -136,8 +140,7 @@ class _chatroomState extends State<chatroom> {
                       } else {
                         print("test:${snapshot.data.toString()}");
                         var response = jsonDecode(snapshot.data.toString());
-                        List msglist = [];
-                        if(snapshot.data.toString().contains("undefined")) {
+                        if (snapshot.data.toString().contains("undefined")) {
                           msglist.add("invalid message.");
                         }
                         if (snapshot.data.toString().contains("default_message")) {
@@ -148,7 +151,7 @@ class _chatroomState extends State<chatroom> {
                           if (enter.body?.entryNotice?.action == "enter") {
                             msglist.add("${enter.body?.entryNotice?.username} enter the room.");
                           }
-                          if(enter.body?.entryNotice?.action == "leave") {
+                          if (enter.body?.entryNotice?.action == "leave") {
                             msglist.add("${enter.body?.entryNotice?.username} leave the room.");
                           }
                         } else if (snapshot.data.toString().contains("admin_all_broadcast")) {
@@ -166,13 +169,24 @@ class _chatroomState extends State<chatroom> {
                             child: Column(
                               children: [
                                 Expanded(
-                                  child: ListView(
-                                    shrinkWrap: true,
+                                  child: ListView.builder(
                                     reverse: true,
-                                    children: [
-                                      for(var text in msglist)
-                                        Text("$text"),
-                                    ],
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Column(
+                                        //讓文字可以向左靠
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          for (var i = 0; i < msglist.length; i++)
+                                            Text(
+                                              "${msglist[i]}",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                backgroundColor: Color.fromARGB(128, 106, 124, 219),
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ),
                               ],
@@ -191,7 +205,36 @@ class _chatroomState extends State<chatroom> {
       //離開按鈕
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pop(context);
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Message"),
+                  content:Container(
+                    constraints: const BoxConstraints(maxHeight: 80),
+                    child: Column(
+                      children: [
+                        Image.asset("Images/broken_heart.png"),
+                        const Text("Are you sure to leave?"),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("No"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
+                      },
+                      child: const Text("Yes"),
+                    ),
+                  ],
+                );
+              });
         },
         backgroundColor: const Color.fromARGB(116, 236, 217, 70),
         child: const Icon(Icons.exit_to_app),

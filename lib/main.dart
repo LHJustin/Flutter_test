@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:untitled/account.dart';
 import 'package:untitled/chatroom.dart';
+import 'package:untitled/generated/l10n.dart';
 import 'package:untitled/home.dart';
-import 'package:untitled/personal.dart';
 import 'package:untitled/search.dart';
 import 'package:untitled/signup.dart';
 import 'package:untitled/takepic.dart';
-
 import 'member.dart';
 
 void main() {
@@ -25,13 +23,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       routes: <String, WidgetBuilder>{
         "my": (BuildContext context) => const MyHomePage(),
         "home": (BuildContext context) => const home(),
         "search": (BuildContext context) => const search(),
         "account": (BuildContext context) => const account(),
         "sign": (BuildContext context) => const signup(),
-        "pic" : (BuildContext context) => const takepic(),
+        "pic": (BuildContext context) => const takepic(),
         "chat": (BuildContext context) => const chatroom(),
       },
       home: const MyHomePage(),
@@ -67,10 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget button() {
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: "search"),
-        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "account")
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: S.current.home),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: S.current.search),
+        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: S.current.account)
       ],
       currentIndex: _counter,
       onTap: (int index) {

@@ -6,6 +6,8 @@ import 'package:untitled/signup.dart';
 import 'package:untitled/main.dart';
 import 'package:untitled/search.dart';
 
+import 'generated/l10n.dart';
+
 class account extends StatelessWidget {
   const account({Key? key}) : super(key: key);
 
@@ -54,16 +56,19 @@ class Body extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const Text(
-              "Log In",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+            Text(
+              S.of(context).logIn,
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 32),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'account',
-                labelStyle: TextStyle(color: Colors.black),
-                hintText: 'enter 4~20 words',
+              decoration: InputDecoration(
+                labelText: S.of(context).accountnum,
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: S.of(context).enteraccount,
                 filled: true,
                 fillColor: Color.fromARGB(216, 144, 210, 220),
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -74,10 +79,10 @@ class Body extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'password',
-                labelStyle: TextStyle(color: Colors.black),
-                hintText: 'enter 6~12 words',
+              decoration: InputDecoration(
+                labelText: S.of(context).password,
+                labelStyle: const TextStyle(color: Colors.black),
+                hintText: S.of(context).enterpass,
                 filled: true,
                 fillColor: Color.fromARGB(216, 144, 210, 220),
                 border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -109,8 +114,8 @@ class Body extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text("Message"),
-                          content: const Text("Your account or password is wrong."),
+                          title: Text(S.of(context).message),
+                          content: Text(S.of(context).wrong),
                           actions: [
                             ElevatedButton(
                                 onPressed: () {
@@ -122,7 +127,7 @@ class Body extends StatelessWidget {
                       });
                 }
               },
-              child: const Text("Log In"),
+              child: Text(S.of(context).logIn),
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
                 shadowColor: Colors.orangeAccent,
@@ -135,7 +140,7 @@ class Body extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, 'sign');
               },
-              child: const Text("Sign Up"),
+              child: Text(S.of(context).signUp),
               style: TextButton.styleFrom(
                 primary: const Color.fromARGB(255, 131, 15, 213),
               ),

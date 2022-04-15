@@ -1,0 +1,19 @@
+{
+  "home": "home",
+  "search": "search",
+  "account": "account",
+  "searchResult": "Search Result",
+  "mostView": "Most View",
+  "logIn": "Log In",
+  "accountnum": "account number",
+  "password": "password",
+  "enteraccount": "enter 4~20 words",
+  "enterpass": "enter 6~12 words",
+  "signUp": "Sign Up",
+  "message": "Message",
+  "wrong": "Your account or password is wrong.",
+  "nickname": "Nickname",
+  "enternick": "Textbox can't empty",
+  "wrongformat": "Your format is wrong.",
+  "success": "Log in success."
+}

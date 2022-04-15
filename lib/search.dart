@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'chatroom.dart';
+import 'generated/l10n.dart';
 import 'json/jsonprogram.dart';
 import 'main.dart';
 
@@ -63,9 +64,9 @@ class _BodyState extends State<Body> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(5, 0, 40, 0),
                     child: TextField(
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "search",
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: S.of(context).search,
                       ),
                       inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
                       onSubmitted: (val) {
@@ -81,9 +82,9 @@ class _BodyState extends State<Body> {
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          child: const Text(
-                            "Search Result",
-                            style: TextStyle(
+                          child: Text(
+                            S.of(context).searchResult,
+                            style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                               color: Color.fromARGB(255, 116, 64, 0),
@@ -101,51 +102,51 @@ class _BodyState extends State<Body> {
                           children: <Widget>[
                             for (int i = 0; i < snapshot.data!.length; i++)
                               if (snapshot.data![i].streamTitle!.contains(search) || snapshot.data![i].nickname!.contains(search) || snapshot.data![i].tags!.contains(search))
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const chatroom()));
-                                    },
-                                    child: Container(
-                                      color: Colors.purple,
-                                      child: Stack(
-                                        children: [
-                                          FadeInImage.assetNetwork(
-                                            placeholder: "Images/mm.jpg",
-                                            image: "${snapshot.data![i].headPhoto}",
-                                            fit: BoxFit.cover,
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text(
-                                                '${snapshot.data![i].streamTitle}',
-                                                style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 20),
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            verticalDirection: VerticalDirection.up,
-                                            children: [
-                                              Text(
-                                                "${snapshot.data![i].nickname}",
-                                                style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 24),
-                                              ),
-                                              Text(
-                                                "${snapshot.data![i].tags}",
-                                                style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const chatroom()));
+                                  },
+                                  child: Container(
+                                    color: Colors.purple,
+                                    child: Stack(
+                                      children: [
+                                        FadeInImage.assetNetwork(
+                                          placeholder: "Images/mm.jpg",
+                                          image: "${snapshot.data![i].headPhoto}",
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              '${snapshot.data![i].streamTitle}',
+                                              style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 20),
+                                            )
+                                          ],
+                                        ),
+                                        Column(
+                                          verticalDirection: VerticalDirection.up,
+                                          children: [
+                                            Text(
+                                              "${snapshot.data![i].nickname}",
+                                              style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white, fontSize: 24),
+                                            ),
+                                            Text(
+                                              "${snapshot.data![i].tags}",
+                                              style: const TextStyle(backgroundColor: Color.fromARGB(100, 256, 256, 256), color: Colors.white),
+                                            ),
+                                          ],
+                                        )
+                                      ],
                                     ),
                                   ),
+                                ),
                           ],
                         ),
                       ],
                     ),
-                  const Text(
-                    "Most View",
-                    style: TextStyle(
+                  Text(
+                    S.of(context).mostView,
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 22, 0, 80),
