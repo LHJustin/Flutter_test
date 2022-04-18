@@ -27,6 +27,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final scontrol = TextEditingController();
   List jlist = [];
   String search = "";
 
@@ -69,7 +70,8 @@ class _BodyState extends State<Body> {
                         hintText: S.of(context).search,
                       ),
                       inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
-                      onSubmitted: (val) {
+                      controller: scontrol,
+                      onChanged: (val) {
                         print(val);
                         setState(() {
                           search = val;
