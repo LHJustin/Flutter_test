@@ -15,5 +15,15 @@
   "nickname": "Nickname",
   "enternick": "Textbox can't empty",
   "wrongformat": "Your format is wrong.",
-  "success": "Log in success."
+  "success": "Log in success.",
+  "takePicture": "Take Picture",
+  "fromPhoto": "from photos",
+  "takeAPhoto": "take a photo",
+  "logOut": "Log Out",
+  "sendMessage": "send message",
+  "sureleave": "Are you sure to leave?",
+  "yes": "Yes",
+  "no": "No",
+  "enter": " enter the room.",
+  "leave": " leave the room."
 }

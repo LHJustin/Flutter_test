@@ -219,6 +219,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Take Picture`
+  String get takePicture {
+    return Intl.message(
+      'Take Picture',
+      name: 'takePicture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `from photos`
+  String get fromPhoto {
+    return Intl.message(
+      'from photos',
+      name: 'fromPhoto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `take a photo`
+  String get takeAPhoto {
+    return Intl.message(
+      'take a photo',
+      name: 'takeAPhoto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Log Out`
+  String get logOut {
+    return Intl.message(
+      'Log Out',
+      name: 'logOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `send message`
+  String get sendMessage {
+    return Intl.message(
+      'send message',
+      name: 'sendMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure to leave?`
+  String get sureleave {
+    return Intl.message(
+      'Are you sure to leave?',
+      name: 'sureleave',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get yes {
+    return Intl.message(
+      'Yes',
+      name: 'yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message(
+      'No',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` enter the room.`
+  String get enter {
+    return Intl.message(
+      ' enter the room.',
+      name: 'enter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` leave the room.`
+  String get leave {
+    return Intl.message(
+      ' leave the room.',
+      name: 'leave',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -227,6 +327,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'),
     ];
   }

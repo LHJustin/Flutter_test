@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/generated/l10n.dart';
 import 'package:untitled/json/jsonclose.dart';
 import 'package:untitled/json/jsoninto.dart';
 import 'package:untitled/json/jsonmessage.dart';
@@ -101,10 +102,10 @@ class _chatroomState extends State<chatroom> {
                   //對話框，不用expanded讓內容讓textfield物件彈性一點畫面會爆掉
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: "send message",
+                      decoration: InputDecoration(
+                        hintText: S.of(context).sendMessage,
                         filled: true,
-                        fillColor: Color.fromARGB(89, 90, 90, 90),
+                        fillColor: const Color.fromARGB(89, 90, 90, 90),
                       ),
                       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z\u4e00-\u9fa50-9]"))],
                       controller: msg,
@@ -149,10 +150,10 @@ class _chatroomState extends State<chatroom> {
                         } else if (snapshot.data.toString().contains("sys_updateRoomStatus")) {
                           into enter = into.fromJson(response);
                           if (enter.body?.entryNotice?.action == "enter") {
-                            msglist.add("${enter.body?.entryNotice?.username} enter the room.");
+                            msglist.add(enter.body!.entryNotice!.username!+S.of(context).enter);
                           }
                           if (enter.body?.entryNotice?.action == "leave") {
-                            msglist.add("${enter.body?.entryNotice?.username} leave the room.");
+                            msglist.add(enter.body!.entryNotice!.username!+S.of(context).leave);
                           }
                         } else if (snapshot.data.toString().contains("admin_all_broadcast")) {
                           notice broadcast = notice.fromJson(response);
@@ -209,13 +210,13 @@ class _chatroomState extends State<chatroom> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text("Message"),
+                  title: Text(S.of(context).message),
                   content:Container(
-                    constraints: const BoxConstraints(maxHeight: 80),
+                    constraints: const BoxConstraints(maxHeight: 100),
                     child: Column(
                       children: [
                         Image.asset("Images/broken_heart.png"),
-                        const Text("Are you sure to leave?"),
+                        Text(S.of(context).sureleave),
                       ],
                     ),
                   ),
@@ -224,13 +225,13 @@ class _chatroomState extends State<chatroom> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text("No"),
+                      child: Text(S.of(context).no),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
                       },
-                      child: const Text("Yes"),
+                      child: Text(S.of(context).yes),
                     ),
                   ],
                 );

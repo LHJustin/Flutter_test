@@ -198,7 +198,7 @@ class _BodyState extends State<Body> {
                             });
                       }
                     },
-                    child: const Text("Sign Up"),
+                    child: Text(S.of(context).signUp),
                     style: ElevatedButton.styleFrom(
                       shape: const StadiumBorder(),
                       shadowColor: Colors.orangeAccent,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/generated/l10n.dart';
 import 'package:untitled/signup.dart';
 
 class takepic extends StatelessWidget {
@@ -36,6 +37,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -58,16 +60,17 @@ class _BodyState extends State<Body> {
               }
               Navigator.pop(context);
             },
-            child: const Text("from photos"),
+            child: Text(S.of(context).fromPhoto),
             style: ElevatedButton.styleFrom(
               shape: BeveledRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
               side: const BorderSide(color: Color(0xFF168B01), width: 1.0, style: BorderStyle.solid),
               primary: const Color.fromARGB(255, 0, 224, 144),
-              padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+              // padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
               shadowColor: const Color.fromARGB(255, 0, 255, 247),
               elevation: 15,
+              minimumSize: const Size.fromHeight(50),
             ),
           ),
           const SizedBox(
@@ -89,14 +92,15 @@ class _BodyState extends State<Body> {
               }
               Navigator.pop(context);
             },
-            child: const Text("take a photo"),
+            child: Text(S.of(context).takeAPhoto),
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
               side: const BorderSide(color: Color(0xFF31801A), width: 1.0, style: BorderStyle.solid),
               primary: const Color.fromARGB(255, 139, 255, 36),
               shadowColor: const Color.fromARGB(250, 2, 203, 255),
               elevation: 15,
-              padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+              // padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+              minimumSize: const Size.fromHeight(50),
             ),
           ),
         ],

@@ -24,24 +24,35 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "account": MessageLookupByLibrary.simpleMessage("account"),
         "accountnum": MessageLookupByLibrary.simpleMessage("account number"),
+        "enter": MessageLookupByLibrary.simpleMessage(" enter the room."),
         "enteraccount":
             MessageLookupByLibrary.simpleMessage("enter 4~20 words"),
         "enternick":
             MessageLookupByLibrary.simpleMessage("Textbox can\'t empty"),
         "enterpass": MessageLookupByLibrary.simpleMessage("enter 6~12 words"),
+        "fromPhoto": MessageLookupByLibrary.simpleMessage("from photos"),
         "home": MessageLookupByLibrary.simpleMessage("home"),
+        "leave": MessageLookupByLibrary.simpleMessage(" leave the room."),
         "logIn": MessageLookupByLibrary.simpleMessage("Log In"),
+        "logOut": MessageLookupByLibrary.simpleMessage("Log Out"),
         "message": MessageLookupByLibrary.simpleMessage("Message"),
         "mostView": MessageLookupByLibrary.simpleMessage("Most View"),
         "nickname": MessageLookupByLibrary.simpleMessage("Nickname"),
+        "no": MessageLookupByLibrary.simpleMessage("No"),
         "password": MessageLookupByLibrary.simpleMessage("password"),
         "search": MessageLookupByLibrary.simpleMessage("search"),
         "searchResult": MessageLookupByLibrary.simpleMessage("Search Result"),
+        "sendMessage": MessageLookupByLibrary.simpleMessage("send message"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "success": MessageLookupByLibrary.simpleMessage("Log in success."),
+        "sureleave":
+            MessageLookupByLibrary.simpleMessage("Are you sure to leave?"),
+        "takeAPhoto": MessageLookupByLibrary.simpleMessage("take a photo"),
+        "takePicture": MessageLookupByLibrary.simpleMessage("Take Picture"),
         "wrong": MessageLookupByLibrary.simpleMessage(
             "Your account or password is wrong."),
         "wrongformat":
-            MessageLookupByLibrary.simpleMessage("Your format is wrong.")
+            MessageLookupByLibrary.simpleMessage("Your format is wrong."),
+        "yes": MessageLookupByLibrary.simpleMessage("Yes")
       };
 }

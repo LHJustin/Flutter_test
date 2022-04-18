@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'generated/l10n.dart';
+
 class personal extends StatelessWidget {
   const personal({Key? key}) : super(key: key);
 
@@ -57,7 +59,7 @@ class Body extends StatelessWidget {
                   await _log();
                   Navigator.pushNamedAndRemoveUntil(context, 'my', (_) => false);
                 },
-                child: const Text("Log Out"),
+                child: Text(S.of(context).logOut),
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 139, 72, 215)),
                     //字體顏色
@@ -93,11 +95,11 @@ class Body extends StatelessWidget {
                         const SizedBox(
                           height: 50.0,
                         ),
-                        Text("Nickname:${mem[0]}"),
+                        Text(S.of(context).nickname+"："+mem[0]),
                         const SizedBox(
                           height: 50.0,
                         ),
-                        Text("Account:${mem[1]}"),
+                        Text(S.of(context).accountnum+"："+mem[1]),
                       ],
                     )),
                   );

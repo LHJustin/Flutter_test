@@ -15,5 +15,15 @@
   "nickname":"暱稱",
   "enternick":"內容不能是空的",
   "wrongformat":"你的格式錯誤。",
-  "success":"登入成功。"
+  "success":"登入成功。",
+  "takePicture":"選取頭像",
+  "fromPhoto":"從相簿選取",
+  "takeAPhoto":"拍照",
+  "logOut":"登出",
+  "sendMessage":"來聊個天吧～",
+  "sureleave":"你真的要離開嗎？",
+  "yes":"是",
+  "no":"不",
+  "enter":"已進入房間",
+  "leave":"已離開房間"
 }
