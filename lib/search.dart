@@ -115,6 +115,9 @@ class _BodyState extends State<Body> {
                                         FadeInImage.assetNetwork(
                                           placeholder: "Images/mm.jpg",
                                           image: "${snapshot.data![i].headPhoto}",
+                                          imageErrorBuilder: (context, error, stackTrace){
+                                            return Image.asset("Images/mm.jpg");
+                                          },
                                           fit: BoxFit.cover,
                                         ),
                                         Column(
@@ -174,6 +177,9 @@ class _BodyState extends State<Body> {
                                 FadeInImage.assetNetwork(
                                   placeholder: "Images/mm.jpg",
                                   image: "${snapshot.data![i].headPhoto}",
+                                  imageErrorBuilder: (context, error, stackTrace){
+                                    return Image.asset("Images/mm.jpg");
+                                  },
                                   fit: BoxFit.cover,
                                 ),
                                 Column(

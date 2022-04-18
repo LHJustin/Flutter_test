@@ -48,6 +48,7 @@ class _chatroomState extends State<chatroom> {
   }
 
   Future<bool> link() async {
+    print('iantest: ssssssssssss');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var iflog = prefs.getBool('login') ?? false;
     if (iflog) {
@@ -62,7 +63,8 @@ class _chatroomState extends State<chatroom> {
     return true;
   }
 
-  void disponse() {
+  @override
+  void dispose() {
     super.dispose();
     _controller.pause();
     channel!.sink.close();
